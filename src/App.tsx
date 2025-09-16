@@ -17,7 +17,7 @@ function App() {
   });
   const [users, setUsers] = useState<IUser[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const backendUrl = "http://localhost:8081/api/users"; // Adjust URL as needed
+  const backendUrl = import.meta.env.VITE_BE_URL;
 
   useEffect(() => {
     fetchUsers();
@@ -114,9 +114,15 @@ function App() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            {isEditing ? "Update User" : "Create User"}
-          </button>
+          {users.length < 5 ? (
+            <button type="submit" className="btn btn-primary">
+              {isEditing ? "Update User" : "Create User"}
+            </button>
+          ) : (
+            <p style={{ color: "red", textAlign: "center", letterSpacing: 1 }}>
+              User limit reached. Cannot add more users.
+            </p>
+          )}
           {isEditing && (
             <button
               type="button"
@@ -125,6 +131,7 @@ function App() {
                 setIsEditing(false);
               }}
               className="btn btn-secondary"
+              style={{ width: "100%", marginLeft: 0 }}
             >
               Cancel
             </button>
